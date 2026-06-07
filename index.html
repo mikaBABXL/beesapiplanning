@@ -36,6 +36,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 .login-overlay {
   position: fixed; inset: 0; background: linear-gradient(135deg, #4a2512 0%, #7a4020 50%, #c47f0b 100%);
   display: flex; align-items: center; justify-content: center; z-index: 9000;
+  -webkit-overflow-scrolling: touch;
+}
+.login-overlay button {
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+  touch-action: manipulation;
 }
 .login-box {
   background: var(--cream); border-radius: 24px; padding: 44px 40px;
@@ -959,6 +965,17 @@ function showLoginChoice() {
   document.getElementById('loginPass').value = '';
   document.getElementById('loginError').style.display = 'none';
 }
+
+// Fix iOS Safari: attach touchend listeners to login buttons
+document.addEventListener('DOMContentLoaded', function() {
+  var btns = document.querySelectorAll('#loginChoiceBox button');
+  btns.forEach(function(btn) {
+    btn.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      btn.click();
+    }, {passive: false});
+  });
+});
 
 function showLoginForm(mode) {
   loginMode = mode;
